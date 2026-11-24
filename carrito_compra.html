@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de la compra</title>
+    <style>
+
+:root {
+  --color-principal: #0f8b8d;
+  --color-fondo: #f5f7f8;
+  --color-tarjeta: #ffffff;
+  --color-texto: #1f2933;
+  --radio: .75rem;
+  --sombra: 0 2px 8px rgba(0, 0, 0, .08);
+}
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+h1 { 
+    text-align: center; 
+}
+.contenedor {
+	display: grid;
+	gap: .5rem;
+	margin: auto;
+	grid-template-columns: 1fr 1fr;
+    max-width: 1000px;
+    align-items: start;
+}
+
+.productos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: .5rem;
+}
+.producto {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: space-between;
+  gap: .5rem;
+  text-align: center;
+  aspect-ratio: 1 / 1;                   
+  padding: .5rem;
+  background: var(--color-tarjeta);
+  border: 2px solid var(--color-principal);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  transition: transform .15s, box-shadow .15s;
+}
+.producto h2,
+.producto p {
+  grid-column: span 2;
+  margin: 0;
+}
+.producto button, button {
+  padding: .5rem;
+  border: none;
+  border-radius: .5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter .15s;
+  background-color: var(--color-principal);
+  color: var(--color-tarjeta);
+}
+.producto button:hover{
+  background-color: var(--color-fondo);
+  color: var(--color-principal); 
+}
+.producto:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, .5);
+}
+.carrito {
+	display: flex;
+	height: 350px;
+	width: 650px;
+}
+.out_carrito {
+	  display: flex;
+	  flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+	  justify-content: space-evenly;
+    gap: .25rem;
+    padding: 1rem;
+    background: var(--color-tarjeta);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+}
+.listado {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr;
+  align-items: center;
+  padding: .75rem 0;
+  border-bottom: 1px dashed var(--color-principal); 
+}
+.listado h3, .listado p {
+  margin: 0;
+}
+.listado p:last-child{
+  font-weight: 600;
+  text-align: right;
+}
+.compra_total {
+	border: 1px dashed var(--color-principal);
+	text-align: right;
+	font-weight: 600;
+  padding: .5rem;
+}
+.botones {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+	justify-content: center;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Carrito de la compra usando JS</h1>
+    <p>Vamos a crear un carrito de la compra en el que se almacenen los datos en un servidor local y luego podamos ir llamándolos</p>
+    <div class="contenedor">
+      <section class="productos">
+            
+      </section>
+      <section class="carrito">
+        <div class="out_carrito">
+
+        </div>
+      </section>
+    </div>
+
+    <script>
+        //PASOS
+        //1. Definimos las varibles
+        //2. Creamos un array con los diferentes productos
+        //3. Creamos un bucle para crearlos bloques de cada producto
+        //  3.1. Usamos createelement y luego le ponemos los atributos y los textContent según lo que tengo en el array de cada uno de ellos
+        //  3.2 Lo guardamos en un array con arrays en cada producto
+        //  3.3. Lo pintamos en el DOM
+        //4. Función parametrizada para introducir los productos que compramos
+        //  4.1. Ponemos los productos que hemos cogido
+        //  4.2. El precio total de cada producto
+        //  4.3. El precio total de  la compra
+        //5. Guardamos esto en el carrito de la compra en storage
+        //6. Guardamos todo en el servidor 
+
+        //VARIABLES
+        const MENU_PRODUCTOS =  document.querySelector('.productos');
+        const CARRITO_TOTAL = document.querySelector('.out_carrito');
+        let productos = [['Producto 1', 2, 'id1'], ['Producto 2', 3, 'id2'],['Producto 3', 1, 'id3'],['Producto 4', 1.5, 'id4']]
+        let carrito = [];
+        //FUNCIONES
+        //Con este bucle creamos las tarjetas para cada producto a partir del array productos. 
+        for (let i = 0; i < productos.length; i++) {
+            const producto = productos[i];
+            //creamos el div
+            let bloque = document.createElement('div');
+            bloque.className = 'producto';
+            //ponemos el nombre del producto
+            let item = document.createElement('h2');
+            //usamos `` por que es una variable, si ponemos '' no funciona
+            item.textContent = `${producto[0]}`;
+            //ponemos su precio
+            let precio = document.createElement('p');
+            precio.textContent = `Precio: ${producto[1]} €`;
+            //creamos el botón de añadir y de restar
+            let boton_suma = document.createElement('button');
+            boton_suma.setAttribute('id', `btn_suma_${i}`);
+            boton_suma.textContent = 'Añadir'
+            let boton_resta = document.createElement('button');
+            boton_resta.setAttribute('id', `btn_resta_${i}`);
+            boton_resta.textContent = 'Quitar'
+            //Ponemos en el DOM
+            bloque.append(item, precio, boton_suma, boton_resta)
+            MENU_PRODUCTOS.append(bloque);
+            //función para cada botón
+            boton_suma.onclick = () => gestionCarrito(producto[2], producto[0], producto[1], 1);
+            boton_resta.onclick = () => gestionCarrito(producto[2], producto[0], producto[1], -1);
+        }
+        //Función para añadir productos
+        function gestionCarrito(id, producto, precio, input){
+            //comprobar si el producto ya está en el pedido para actualizarlo
+            for (const producto of carrito) {
+                if (producto[0] == id){
+                    producto[2] += input;
+                    producto[4] = producto[2] * producto[3];
+                    //creamos un if para eliminar el pedido cuando la cantidad es 0. Tiene que estar en este if que es cuando ya hay un pedido de este producto.
+                    if (producto[2] === 0){
+                        let posicion = carrito.indexOf(producto);
+                        //con esto eliminamos ese pedido 
+                        carrito.splice(posicion, 1);
+                    }
+                    muestraCarrito();
+                    return;
+                } 
+            }
+            //creamos un pedido de un producto la primera vez que pulsamos
+            //con esto hacemos que no pueda quitar un producto que no existe al principio
+            if (input < 0){
+              return;
+            }
+            let total = precio;
+            let pedido = [id, producto, 1, precio, total];
+            carrito.push(pedido);
+            //guardamos el carrito cada vez que se modifica
+            muestraCarrito();
+            //Para ver los arrays que hemos creado
+            //console.log('Carrito actual:', carrito);
+        }
+        //Función para pintar el DOM
+        function muestraCarrito(){
+            CARRITO_TOTAL.innerHTML = '';
+            for (const pedido of carrito) {
+              //para crear los elementos d ela lista de la compra
+              let listado = document.createElement('div');
+              listado.className = 'listado'
+              let articulo = document.createElement('h3');
+              let cantidad = document.createElement('p');
+              let precio = document.createElement('p');
+              let precio_total = document.createElement('p');
+              articulo.textContent = `${pedido[1]}`;
+              cantidad.textContent = `Cantidad X ${pedido[2]}`;
+              precio.textContent = `Precio: ${pedido[3]} €`;
+              precio_total.textContent= `TOTAL: ${pedido[4]} €`;
+              listado.append(articulo, cantidad, precio, precio_total);
+              CARRITO_TOTAL.append(listado);
+            }
+            //creamos el span para poner el resultado
+            let total_compra = document.createElement('span');
+            total_compra.setAttribute('class', 'compra_total');
+            //usamos map() y reduce() para crear el total.
+            //con esta función le digo que recorra los arrays (pedido) y me cree un array nuevo con solo el valor de la posición 4, que e el precio total del pedido
+            let totales = carrito.map((pedido) => pedido[4]);
+            //con esta le digo que con el array nuevo sume los elementos del array para darme un precio total.
+            let a_pagar = totales.reduce((total, precio) => total + precio);
+            //console.log(a_pagar); 
+            total_compra.textContent = `El total a pagar es : ${a_pagar} €`;
+
+            //creamos el botón de guardar la compra para luego guardarlo en el servidor y para vaciar el carrito de la compra
+            let botones = document.createElement('div');
+            botones.className = 'botones'
+            let guardar = document.createElement('button');
+            guardar.textContent = 'Guardar la compra';
+            let vaciar = document.createElement('button');
+            vaciar.textContent = 'Vacia el carrito';
+            botones.append(guardar, vaciar); 
+            // append para el div total
+            CARRITO_TOTAL.append(total_compra, botones);
+            //ponemos aquí la función para guardar en el local storage el carrito de la compra
+            guardaCarrito();
+            //añadimos la función para guardar el carrito en el servidor. Tenemos que enviarle un objeto convertido a archivo JSON
+            guardar.onclick = () => {
+              let carro_servidor = convierteObjeto(carrito);
+              JSON.stringify(carro_servidor);
+              console.log(carro_servidor)
+              enviaDatos(carro_servidor);
+            }
+            vaciar.onclick = vaciaCarrito;
+        }
+          //Función para vaciar el carrito
+        function vaciaCarrito(){
+          CARRITO_TOTAL.innerHTML = '';
+          carrito = [];
+          guardaCarrito();
+          //vacio la memoria en el storage. También borraría los usuarios de haberlos.
+          //localStorage.clear();
+        }
+        //Funciones para guardar los datos en local y en el servidor
+        //Almacenar los datos como objeto en Storage
+        function guardaCarrito(){
+          let carrito_guardado = convierteObjeto(carrito);
+          //console.log(carrito_guardado);
+          localStorage.setItem('carro_compra', JSON.stringify(carrito_guardado));
+        }
+        //Almacenar los productos en el sevidor
+        //Datos base
+        const id = 'esther_carrito'
+        const url_guardar = `https://datos.cursoweb.tech/guardar.php?dest=${id}`
+        const url_leer = `https://datos.cursoweb.tech/leer.php?dest=${id}`
+        const usuario = "labora";
+        const password = "Cl4v3$";
+        // Codificar credenciales en Base64
+        const credenciales = btoa(`${usuario}:${password}`);
+       
+        //Enviar info
+        async function enviaDatos(carro_servidor){
+          try {
+              const res = await fetch(url_guardar, {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                      "Authorization": `Basic ${credenciales}`
+                  },
+                  body: JSON.stringify(carro_servidor)
+              })
+              if (!res.ok) {
+                  throw new Error('Error en la conexión');
+              }
+              const data = await res.json()
+              console.log(data)
+          } catch (err) {
+              console.error("Error:", err)
+          }
+        }
+        //función auxiliar para convertir los arrays en objetos
+        function convierteObjeto(array){
+          let objeto = array.map((elemento) => {
+            return {
+              referencia: elemento[0],
+              producto: elemento[1],
+              cantidad: elemento[2],
+              precio: elemento[3],
+              total: elemento[4],
+              }
+          })
+        return objeto;
+        }
+
+    </script>
+</body>
+</html>

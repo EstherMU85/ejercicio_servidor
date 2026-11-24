@@ -1,0 +1,179 @@
+*{ 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+img{
+	width: 160px;
+	height: 288px;
+}
+
+.contenedor {
+	padding-bottom: 1200px;
+}
+.calendario {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+/*  Estilo para el header */
+header {
+	position: fixed;
+	z-index: 900;
+	background-color: #e9e9e9;
+	width: 100%;
+	top: 0;
+	height: 130px;
+}
+h1 {
+	text-align: center;
+	font-size: 2rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	color: teal;
+  	position: relative;
+  	top: 4px;
+}
+nav {
+	position: relative;
+	top: 20px;
+	left: 12.5%;
+}
+ul {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	width: 80%;
+  	gap: .5rem;
+	position: relative;
+  	bottom: 12px;
+}
+li {
+	list-style: none;
+	text-align: center;
+	width: 15%;
+	border: 1px solid teal;
+  	border-radius: .5rem;
+  	background-color: #dff2ed;
+}
+a {
+	font-size: 1rem;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	color: teal;
+	font-weight: bold;
+}
+
+/* Para la organización de las tablas para cada fila */
+section {
+	display: flex;
+	flex-wrap: wrap;
+	margin: auto;
+  	gap: 30px;
+	position: relative;
+  	top: 117px;
+}
+
+/* Estilo para las tablas */
+table {
+	width: 580px;
+	height: 360px;
+	border: 1px solid black;
+	border-radius: .25rem;
+	margin-top: 30px;
+	border: 1px solid teal;
+	background-color: #f2f2f2;
+}
+.imagen {
+	width: 160px;
+	height: 288px;
+	border: 1px solid teal;
+	border-radius: .25rem;
+	background-color: lightgray;
+	overflow: hidden;
+}
+caption {
+	width: 580px;
+	height: 72px;
+	background-color: #dfeded;
+	border-radius: 1rem;
+	scroll-margin-top: 140px;
+}
+h3 {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	text-align: center;
+	display: block;
+	padding-top: 20px;
+	color: olive;
+}
+
+/* Estilo celdas */
+td, th {
+	text-align: center;
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	font-size: 1rem;
+	border: 1px solid teal;
+	border-radius: .25rem;
+	border-radius: .25rem;
+ 	box-shadow: 0 0 5px teal;
+}
+
+th {
+	color: antiquewhite;
+	background-color: grey;
+	font-weight: bold;
+}
+
+.finde {
+	color: #fa561a;
+	background-color: #e1eef1;
+	font-weight: bold;
+}
+/* Cuadro de diálogos */
+#cuadro_evento {
+	width: 500px;
+	height: 460px;
+	margin: auto;
+	border-radius: .5rem;
+	border: 3px solid darkcyan;
+}
+.contenedor_dialog {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: .75rem;
+	justify-items: center;
+}
+.title{
+grid-column: span 2;
+}
+#in_texto{
+	width: 200px;
+	height: 200px;
+}
+#in_date, #in_event_name{
+	width: 200px;
+}
+.contenedor_dialog > .fila{
+	grid-column: span 2;
+  	display: flex;
+  	flex-direction: column;
+  	gap: .2rem;
+} 
+#btn_modal{
+	display: flex;
+	flex-direction: row;
+}
+.eventos {
+	display: flex;
+	gap: .2rem;
+}
+.evento {
+	width: 20px;
+	height: 20px;
+	color: wheat;
+	font-weight: bold;
+	background-color: darkcyan;
+	border-radius: 50%;
+	line-height: 1.2;
+}
